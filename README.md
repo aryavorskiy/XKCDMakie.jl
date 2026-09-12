@@ -8,7 +8,7 @@ Uses the authentic [xkcd font](https://github.com/ipython/xkcd-font/tree/master)
 
 Paste it into your REPL to install:
 ```julia
-using Pkg; Pkg.add(url="github.com/aryavorskiy/XKCDMakie.jl")
+using Pkg; Pkg.add(url="http://github.com/aryavorskiy/XKCDMakie.jl")
 ```
 
 Use it the same way you use `CairoMakie`. After `import`ing the package, the whole XKCD mode behaves like a Makie theme, which you can update or disable by running `Makie.set_theme!`. See `xkcd_theme` for more info.
@@ -25,6 +25,6 @@ All images in this gallery were generated using this package. You can find the c
 | --- | --- |
 | ![Stove ownership (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/0418_stove_ownership.png) | ![Messi (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/3260_messi.png) |
 
-| [Self-Description](https://xkcd.com/0688/) |
+| [Self-Description](https://xkcd.com/688/) |
 | --- |
 | ![Self-Description (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/0688_self_description.png) |
