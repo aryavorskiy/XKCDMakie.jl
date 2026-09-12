@@ -16,14 +16,15 @@ Use it the same way you use `CairoMakie`. Should be a drop-in replacement, file 
 ## Gallery
 
 All images in this gallery were generated using this package. You can find the code in the [`contrib/`](contrib/) directory.
-![Demo](demo.png)
+
+![Demo](img/demo.png)
 
 **Disclaimer:** these works below belong to Randall Monroe, I only adapted them to XKCDMakie.
 
 | [Stove Ownership](https://xkcd.com/418/) | [Messi](https://xkcd.com/3260/) |
 | --- | --- |
-| ![Stove ownership (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](0418_stove_ownership.png) | ![Messi (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](3260_messi.png) |
+| ![Stove ownership (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/0418_stove_ownership.png) | ![Messi (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/3260_messi.png) |
 
 | [Self-Description](https://xkcd.com/0688/) |
 | --- |
-| ![Self-Description (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](0688_self_description.png) |
+| ![Self-Description (Created by Randall Monroe, adapted to XKCDMakie by Alexander Yavorsky)](img/0688_self_description.png) |
