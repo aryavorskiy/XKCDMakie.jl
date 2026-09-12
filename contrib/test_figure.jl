@@ -25,4 +25,4 @@ strength = vec(sqrt.(us .^ 2 .+ vs .^ 2))
 arrow_fun(x) = Point2f(sin(x[1])*cos(x[2]), -cos(x[1])*sin(x[2]))
 arrows2d(fig[2, 1:2], xs, ys, arrow_fun, lengthscale = 0.3, color = strength)
 
-fig
+display(fig)
