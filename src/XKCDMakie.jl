@@ -20,7 +20,23 @@ end
 
 xkcd_font_dir = artifact_path(xkcd_font_hash)
 
-theme_xkcd(gridvisible=false) = Theme(
+using CoherentNoise
+const NOISE_DEFAULT =
+    scale(opensimplex2_2d(seed=rand(UInt64)), 3e0) * 0.2 +
+    scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.4 +
+    scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
+
+"""
+    theme_xkcd([; gridvisible, noise_generator, min_dist])
+
+Sets the theme for XKCD-style rendering
+
+## Keyword arguments
+- `gridvisible`: visibility of the grid (default: false)
+- `min_dist`: accuracy of hand-drawn line emulation. Lower is more precise, but heavier to compute (default: 3)
+- `noise_generator`: the noise sampler that is responsible for hand-drawn line emulation.
+"""
+theme_xkcd(gridvisible=false, noise_generator=NOISE_DEFAULT, min_dist=3) = Theme(;
     patchstrokecolor = :black,
     patchstrokewidth = 1,
     Axis = (
@@ -32,18 +48,16 @@ theme_xkcd(gridvisible=false) = Theme(
     fonts = (
         bold = joinpath(xkcd_font_dir, "xkcd-script.otf"),
         regular = joinpath(xkcd_font_dir, "xkcd-regular.otf")
-    )
+    ),
+    noise_generator, min_dist
 )
 export theme_xkcd
-
-using CoherentNoise, Base.ScopedValues
-const NOISE = ScopedValue(
-    scale(opensimplex2_2d(seed=rand(UInt64)), 3e0) * 0.2 +
-    scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.4 +
-    scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
-)
-
-function normalize_path(positions, interps::Tuple; min_dist=3)
+theme_get(key, default) = if key in keys(Makie.current_default_theme())
+    Makie.current_default_theme()[key][]
+else
+    default
+end
+function normalize_path(positions, interps::Tuple; min_dist=theme_get(:min_dist, 3))
     pt1 = first(positions)
     out = [pt1]
     interp_mappers = map(interps) do interp
@@ -86,9 +100,12 @@ function line_segments_to_lines(positions)
     return vec(out_pts)
 end
 
-jumble!(positions) = map!(positions) do pt
-    any(isnan, pt) && return pt
-    pt .+ (sample(NOISE[], pt...), sample(NOISE[], (pt .+ (3234, 1230))...))
+function jumble!(positions)
+    noise = theme_get(:noise_generator, NOISE_DEFAULT)
+    map!(positions) do pt
+        any(isnan, pt) && return pt
+        pt .+ (sample(noise, pt...), sample(noise, (pt .+ (3234, 1230))...))
+    end
 end
 
 # Hacking into CairoMakie's internals for line draws...
