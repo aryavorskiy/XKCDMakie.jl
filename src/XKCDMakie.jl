@@ -43,7 +43,7 @@ const NOISE = ScopedValue(
     scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
 )
 
-function normalize_path(positions, interps::Tuple; min_dist=2)
+function normalize_path(positions, interps::Tuple; min_dist=3)
     pt1 = first(positions)
     out = [pt1]
     interp_mappers = map(interps) do interp
@@ -92,8 +92,8 @@ jumble!(positions) = map!(positions) do pt
 end
 
 # Hacking into CairoMakie's internals for line draws...
-function CairoMakie.draw_single(is_lines_plot::Bool, ctx, positions::Vector)
-    if !is_lines_plot
+function CairoMakie.draw_single(islines::Bool, ctx, positions::Vector)
+    if !islines
         positions = line_segments_to_lines(positions)
     end
     new_pos = jumble!(normalize_path(positions))

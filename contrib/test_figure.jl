@@ -2,12 +2,12 @@ using XKCDMakie
 
 fig = Figure()
 xs = 0:0.1:10
-lines(fig[1, 1], xs, sin.(xs), axis=(;title="Line plots"))
+lines(fig[1, 1], xs, sin.(xs), axis=(;title="Line plots"), linestyle=:dash)
 lines!(fig[1, 1], xs, -sin.(xs), color=xs)
 textlabel!(fig[1, 1], Point2f(5, 0), "Sinewaves")
 
 hist(fig[1, 2], randn(1000), normalization=:pdf,
-    axis=(;limits=((-5, 5), nothing), title="Histigrams and annotations"))
+    axis=(;limits=((-5, 5), nothing), title="Histograms and annotations"))
 n_pdf(x) = 1/sqrt(2pi) * exp(-x^2/2)
 annotation!(fig[1, 2], 3.5, n_pdf(0) / 2, 3, n_pdf(3),
     text = "3 sigma\n limit",
