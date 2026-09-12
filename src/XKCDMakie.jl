@@ -1,13 +1,40 @@
 module XKCDMakie
 
+using Reexport
 @reexport using CairoMakie
-import Makie: Colorant, Polygon
+using Pkg.Artifacts
+import Makie: Colorant, Polygon, ComputeGraph
 import CairoMakie: Cairo, Screen
+
+artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
+xkcd_font_hash = artifact_hash("xkcd-font", artifact_toml)
+if xkcd_font_hash === nothing || !artifact_exists(xkcd_font_hash)
+    xkcd_font_hash = create_artifact() do artifact_dir
+        xkcd_font_repo = "https://github.com/ipython/xkcd-font/raw/refs/heads/master"
+        download("$xkcd_font_repo/xkcd-script/font/xkcd-script.otf", joinpath(artifact_dir, "xkcd-script.otf"))
+        download("$xkcd_font_repo/xkcd/build/xkcd-Regular.otf", joinpath(artifact_dir, "xkcd-regular.otf"))
+        download("$xkcd_font_repo/xkcd/build/xkcd.otf", joinpath(artifact_dir, "xkcd.otf"))
+    end
+    bind_artifact!(artifact_toml, "xkcd-font", xkcd_font_hash)
+end
+
+xkcd_font_dir = artifact_path(xkcd_font_hash)
+
+theme_xkcd() = Theme(
+    patchstrokecolor = :black,
+    patchstrokewidth = 1,
+    fonts = (
+        bold = joinpath(xkcd_font_dir, "xkcd-script.otf"),
+        regular = joinpath(xkcd_font_dir, "xkcd-regular.otf")
+    )
+)
+export theme_xkcd
 
 using CoherentNoise, Base.ScopedValues
 const NOISE = ScopedValue(
-    scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.3 +
-    scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.7
+    scale(opensimplex2_2d(seed=rand(UInt64)), 3e0) * 0.2 +
+    scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.4 +
+    scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
 )
 
 function normalize_path(positions, interps::Tuple; min_dist=2)
@@ -81,11 +108,11 @@ function CairoMakie.draw_poly(scene::Scene, screen::Screen, poly::Poly, points::
         args...)
     CairoMakie.draw_poly_as_mesh(scene::Scene, screen::Screen, poly)
 end
-function draw_poly(scene::Scene, screen::Screen, poly::Poly, _)
-    CairoMakie.draw_poly_as_mesh(scene, screen, poly)
-end
-function draw_poly(scene::Scene, screen::Screen, poly, polygons::AbstractArray{<:Polygon})
+function CairoMakie.draw_poly(scene::Scene, screen::Screen, poly::Poly, _)
     CairoMakie.draw_poly_as_mesh(scene, screen, poly)
 end
 
+function __init__()
+    Makie.set_theme!(theme_xkcd())
+end
 end # module XKCDMakie
