@@ -20,9 +20,15 @@ end
 
 xkcd_font_dir = artifact_path(xkcd_font_hash)
 
-theme_xkcd() = Theme(
+theme_xkcd(gridvisible=false) = Theme(
     patchstrokecolor = :black,
     patchstrokewidth = 1,
+    Axis = (
+        topspinevisible=false,
+        rightspinevisible=false,
+        xgridvisible=gridvisible,
+        ygridvisible=gridvisible
+    ),
     fonts = (
         bold = joinpath(xkcd_font_dir, "xkcd-script.otf"),
         regular = joinpath(xkcd_font_dir, "xkcd-regular.otf")

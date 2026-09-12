@@ -8,7 +8,7 @@ textlabel!(fig[1, 1], Point2f(5, 0), "Sinewaves")
 
 hist(fig[1, 2], randn(1000), normalization=:pdf, axis=(;limits=((-5, 5), nothing)))
 n_pdf(x) = 1/sqrt(2pi) * exp(-x^2/2)
-annotation!(fig[1, 2], 4, n_pdf(0) / 2, 3, n_pdf(3),
+annotation!(fig[1, 2], 3.5, n_pdf(0) / 2, 3, n_pdf(3),
     text = "3 sigma",
     path = Ann.Paths.Arc(-0.4),
     style = Ann.Styles.LineArrow(),
