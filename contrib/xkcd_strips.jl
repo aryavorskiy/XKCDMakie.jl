@@ -27,6 +27,7 @@ Label(fig[2, 1], uppercase("At this rate, by 2040 Messi will be\nscoring hundred
 save("3260_messi.png", fig)
 
 # %% Self-description
+# Run this snippet several times to make the recursion recurse
 fig = Figure(size=(800, 200))
 ax, _ = pie(fig[1, 1], [88, 12], color=[:white, :black], offset=-1.9, axis=(;alignmode=Outside(10),
     aspect=DataAspect(), limits=(-2.7, 1.2, -1.4, 1.4)))
