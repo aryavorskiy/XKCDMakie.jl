@@ -37,6 +37,7 @@ Sets the theme for XKCD-style rendering
 - `noise_generator`: the noise sampler that is responsible for hand-drawn line emulation.
 """
 theme_xkcd(gridvisible=false, noise_generator=NOISE_DEFAULT, min_dist=3) = Theme(;
+    xkcd_enabled = true,
     patchstrokecolor = :black,
     patchstrokewidth = 1,
     Axis = (
@@ -113,14 +114,17 @@ function CairoMakie.draw_single(islines::Bool, ctx, positions::Vector)
     if !islines
         positions = line_segments_to_lines(positions)
     end
+    theme_get(:xkcd_enabled, false) ||
+        return CairoMakie.draw_single_lines(ctx, positions)
     new_pos = jumble!(normalize_path(positions))
     return CairoMakie.draw_single_lines(ctx, new_pos)
 end
-
 function CairoMakie.draw_multi(islines::Bool, ctx, positions::Vector, colors, linewidths, dash)
     if !islines
         positions = line_segments_to_lines(positions)
     end
+    theme_get(:xkcd_enabled, false) ||
+        return CairoMakie.draw_multi_lines(ctx, positions, colors, linewidths, dash)
     new_pos, (new_colors, new_lw) = normalize_path(positions, (colors, linewidths))
     jumble!(new_pos)
     return CairoMakie.draw_multi_lines(ctx, new_pos, new_colors, new_lw, dash)

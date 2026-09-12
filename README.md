@@ -11,7 +11,7 @@ Paste it into your REPL to install:
 using Pkg; Pkg.add(url="github.com/aryavorskiy/XKCDMakie.jl")
 ```
 
-Use it the same way you use `CairoMakie`. Should be a drop-in replacement, file an issue if it is not.
+Use it the same way you use `CairoMakie`. After `import`ing the package, the whole XKCD mode behaves like a Makie theme, which you can update or disable by running `Makie.set_theme!`. See `xkcd_theme` for more info.
 
 ## Gallery
 
