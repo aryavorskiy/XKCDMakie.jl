@@ -2,14 +2,14 @@ using XKCDMakie, FileIO
 
 # %% Stove Ownership
 fig = Figure(size=(400, 300))
-ys = ones(100)
+ys = ones(100) .+ randn.() ./ 8
 ys[71:end] .-= range(0, 1, length=30)
 ax, _ = lines(fig[1, 1], ys, axis=(xlabel="time", ylabel="my overall health",
-    title="Stove Ownership by Randall Monroe", limits=(nothing, (-0.1, 1.5))))
+    title="Stove Ownership by Randall Munroe", limits=(nothing, (-0.1, 1.5))))
 hidedecorations!(ax, label=false)
-annotation!(ax, (-100, -75), (71, 1),
+annotation!(ax, (-130, -100), (71, 0.9),
     text=uppercase("The day I realised\nI can cook bacon\nwhenever I wanted"),
-    style = Ann.Styles.LineArrow())
+    style = Ann.Styles.LineArrow(), path=Ann.Paths.Arc(-0.4))
 fig
 save("0418_stove_ownership.png", fig)
 
