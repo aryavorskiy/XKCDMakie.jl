@@ -103,7 +103,7 @@ end
 
 function jumble!(positions)
     noise = theme_get(:noise_generator, NOISE_DEFAULT)
-    map!(positions) do pt
+    map!(positions, positions) do pt
         any(isnan, pt) && return pt
         pt .+ (sample(noise, pt...), sample(noise, (pt .+ (3234, 1230))...))
     end
