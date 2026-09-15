@@ -10,7 +10,6 @@ hidedecorations!(ax, label=false)
 annotation!(ax, (-130, -100), (71, 0.9),
     text=uppercase("The day I realised\nI can cook bacon\nwhenever I wanted"),
     style = Ann.Styles.LineArrow(), path=Ann.Paths.Arc(-0.4))
-fig
 save("0418_stove_ownership.png", fig)
 
 # %% Messi
