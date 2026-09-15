@@ -11,7 +11,7 @@ const NOISE_DEFAULT =
     scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.4 +
     scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
 
-xkcd_font_dir = joinpath(@__DIR__, "fonts")
+xkcd_font_dir = joinpath(@__DIR__, "..", "fonts")
 
 """
     theme_xkcd([; gridvisible, noise_generator, min_dist])
