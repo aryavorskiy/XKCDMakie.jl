@@ -6,7 +6,7 @@ function test_figure()
     fig
 end
 function test_figure_bytes()
-    fname = tempname(suffix=".png")
+    fname = tempname() * ".png"
     save(fname, test_figure())
     bytes = read(fname)
     rm(fname)
