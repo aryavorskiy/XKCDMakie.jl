@@ -4,11 +4,15 @@
 
 The title speaks for itself: an extremely crude hack into [Makie.jl](https://github.com/MakieOrg/Makie.jl) that makes the plots look more hand-drawn. As of now works only with the CairoMakie backend.
 
-Uses the authentic [xkcd font](https://github.com/ipython/xkcd-font/tree/master).
+Uses the authentic [xkcd font](https://github.com/ipython/xkcd-font/tree/master) ([CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/)).
 
 Paste it into your REPL to install:
 ```julia
-using Pkg; Pkg.add(url="http://github.com/aryavorskiy/XKCDMakie.jl")
+using Pkg; Pkg.add("XKCDMakie")
+```
+or
+```
+]add XKCDMakie
 ```
 
 Use it the same way you use `CairoMakie`. After `import`ing the package, the whole XKCD mode behaves like a Makie theme, which you can update or disable by running `Makie.set_theme!`. See `theme_xkcd` for more info.
