@@ -18,7 +18,7 @@ using XKCDMakie
 @testset "Smoke tests" begin
     bytes_xkcd = test_figure_bytes()        # Figure with XKCD mode
 
-    Makie.update_theme!(fonts=(;bold="bold"))
+    Makie.update_theme!(fonts=(;bold="TeX Gyre Heros Makie Bold"))
     bytes_deftitle = test_figure_bytes()    # Title font reset
 
     Makie.update_theme!(fonts=(;regular="default"))
@@ -27,7 +27,7 @@ using XKCDMakie
     Makie.set_theme!(theme_xkcd(gridvisible=true, min_dist=Inf,
         noise_generator=XKCDMakie.NOISE_DEFAULT * 0))
     Makie.update_theme!(
-        fonts=(;bold="TeX Gyre Heros Makie Bold", regular="TeX Gyre Heros Makie"),
+        fonts=(;bold="TeX Gyre Heros Makie Bold", regular="default"),
         Axis=(;topspinevisible=true, rightspinevisible=true))
     bytes_nonoise = test_figure_bytes()     # Disable noise & upsampling
 

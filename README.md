@@ -27,8 +27,6 @@ All images in this gallery were generated using this package. You can find the c
 <summary>Code for this figure</summary>
 
 ```julia
-using Pkg
-Pkg.add(url="https://github.com/aryavorskiy/XKCDMakie.jl")
 using XKCDMakie
 
 fig = Figure(size=(600, 500))
