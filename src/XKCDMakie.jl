@@ -2,7 +2,7 @@ module XKCDMakie
 
 using Reexport
 @reexport using CairoMakie
-import Makie: Colorant, Polygon, ComputeGraph
+import Makie: Colorant
 import CairoMakie: Cairo, Screen
 
 using CoherentNoise
@@ -81,11 +81,26 @@ function normalize_path(positions, interps::Tuple; min_dist=theme_get(:min_dist,
 end
 normalize_path(positions; kw...) = normalize_path(positions, (); kw...)[1]
 
-function line_segments_to_lines(positions)
-    out_pts = similar(positions, 3, length(positions) ÷ 2)
-    out_pts[1:2, :] .= reshape(positions, 2, :)
-    out_pts[3, :] .= Ref(Point2f(NaN, NaN))
-    return vec(out_pts)
+function interleave_pairs(vals, fillwith=nothing)
+    out_vals = similar(vals, 3, length(vals) ÷ 2)
+    out_vals[1:2, :] .= reshape(vals, 2, :)
+    @views if fillwith === nothing
+        out_vals[3, :] .= out_vals[2, :]
+    else
+        fill!(out_vals[3, :], fillwith)
+    end
+    return vec(out_vals)
+end
+function line_segments_to_lines(positions, interps::Tuple=())
+    interleaved_positions = interleave_pairs(positions, Point2f(NaN, NaN))
+    if interps isa Tuple{}
+        return interleaved_positions
+    else
+        return interleaved_positions, map(interps) do interp
+            interp isa AbstractVector && length(interp) == length(positions) ?
+            interleave_pairs(interp) : interp
+        end
+    end
 end
 
 function jumble!(positions)
@@ -108,7 +123,7 @@ function CairoMakie.draw_single(islines::Bool, ctx, positions::Vector)
 end
 function CairoMakie.draw_multi(islines::Bool, ctx, positions::Vector, colors, linewidths, dash)
     if !islines
-        positions = line_segments_to_lines(positions)
+        positions, (colors, linewidths) = line_segments_to_lines(positions, (colors, linewidths))
     end
     theme_get(:xkcd_enabled, false) ||
         return CairoMakie.draw_multi_lines(ctx, positions, colors, linewidths, dash)

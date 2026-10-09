@@ -2,7 +2,7 @@ using Test, CairoMakie
 
 function test_figure()
     fig = Figure()
-    lines(fig[1, 1], 0:1, 0:1, axis=(;title="test"))
+    linesegments(fig[1, 1], 0:3, 0:3, axis=(;title="test"), color=0:3)
     fig
 end
 function test_figure_bytes()
