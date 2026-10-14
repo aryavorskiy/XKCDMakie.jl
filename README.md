@@ -15,45 +15,25 @@ or
 ]add XKCDMakie
 ```
 
-Use it the same way you use `CairoMakie`. After `import`ing the package, the whole XKCD mode behaves like a Makie theme, which you can update or disable by running `Makie.set_theme!`. See `theme_xkcd` for more info.
+Use it the same way you use `CairoMakie`. 
+
+## Configuration
+
+You can use [Makie theme mechanism](https://docs.makie.org/dev/explanations/theming/themes) to configure the look of the plots. The theme responsible for this look-and-feel is `theme_xkcd`, which allows you to configure the following:
+- `gridvisible`: visibility of the grid (default: false)
+- `min_dist`: accuracy of hand-drawn line emulation. Lower is more precise, but heavier to compute (default: 3)
+- `noise_generator`: the noise sampler that is responsible for hand-drawn line emulation (see [CoherentNoise.jl](https://github.com/lazarusA/CoherentNoise.jl)).
+
+> [!note]
+> The font in LaTeX notation cannot be controlled by Makie themes, and custom fonts are not fully supported by the backend. 
+> 
+> XKCDMakie provides experimental support, but it is manually opt-in: use `XKCDMakie.enable_math!()` and `XKCDMakie.enable_math!()`
 
 ## Gallery
 
 All images in this gallery were generated using this package. You can find the code in the [`contrib/`](contrib/) directory.
 
 ![Demo](img/demo.png)
-
-<details>
-<summary>Code for this figure</summary>
-
-```julia
-using XKCDMakie
-
-fig = Figure(size=(600, 500))
-Label(fig[0, 1:2], "XKCDMakie.jl demo plot", fontsize=20, font=:bold)
-
-xs = 0:0.1:10
-lines(fig[1, 1], xs, sin.(xs), axis=(;title="Line plots"), linestyle=:dash)
-lines!(fig[1, 1], xs, -sin.(xs), color=xs)
-textlabel!(fig[1, 1], Point2f(5, 0), "Sinewaves")
-
-hist(fig[1, 2], randn(1000), normalization=:pdf,
-    axis=(;limits=((-5, 5), (0, nothing)), title="Histograms and annotations"))
-n_pdf(x) = 1/sqrt(2pi) * exp(-x^2/2)
-annotation!(fig[1, 2], 3.5, n_pdf(0) / 2, 3, n_pdf(3), text="3 sigma\n limit",
-    path=Ann.Paths.Arc(-0.4), style=Ann.Styles.LineArrow(), labelspace=:data)
-
-xs = LinRange(0, 2pi, 15)
-ys = LinRange(0, 3pi, 10)
-us = [sin(x) * cos(y) for x in xs, y in ys]
-vs = [-cos(x) * sin(y) for x in xs, y in ys]
-strength = vec(sqrt.(us .^ 2 .+ vs .^ 2))
-arrow_fun(x) = Point2f(sin(x[1])*cos(x[2]), -cos(x[1])*sin(x[2]))
-arrows2d(fig[2, 1:2], xs, ys, arrow_fun, lengthscale=0.3, color=strength,
-        axis=(;title="And even arrow plots!"))
-fig
-```
-</details>
 
 **Disclaimer:** these works below belong to Randall Munroe, I only adapted them to XKCDMakie.
 

@@ -4,7 +4,7 @@ using Reexport
 @reexport using CairoMakie
 import Makie: Colorant
 import CairoMakie: Cairo, Screen
-import FreeTypeAbstraction
+import FreeTypeAbstraction, MathTeXEngine
 
 using CoherentNoise
 const NOISE_DEFAULT =
@@ -137,17 +137,30 @@ end
 
 # And polygon draws
 function CairoMakie.draw_poly(scene::Scene, screen::Screen, poly::Poly, points::Vector{<:Point2}, color::Union{Colorant, Cairo.CairoPattern},
-        args...)
+        _args...)
     CairoMakie.draw_poly_as_mesh(scene::Scene, screen::Screen, poly)
 end
 function CairoMakie.draw_poly(scene::Scene, screen::Screen, poly::Poly, _)
     CairoMakie.draw_poly_as_mesh(scene, screen, poly)
 end
 
+enable_math!() = MathTeXEngine.set_texfont_family!(MathTeXEngine.FontFamily("XKCD"))
+disable_math!() = MathTeXEngine.set_texfont_family!()
+
 function __init__()
     Makie.set_theme!(theme_xkcd())
     if XKCD_FONT_DIR ∉ FreeTypeAbstraction.fontpaths()
         push!(FreeTypeAbstraction.fontpaths(), XKCD_FONT_DIR)
     end
+    xkcd_fontpath = joinpath(XKCD_FONT_DIR, "xkcd-script.otf")
+    MathTeXEngine.default_font_families["XKCD"] = MathTeXEngine.FontFamily(
+        Dict(
+            :regular => xkcd_fontpath,
+            :italic => xkcd_fontpath,
+            :bold => xkcd_fontpath,
+            :bolditalic => xkcd_fontpath,
+            :math => xkcd_fontpath
+        )
+    )
 end
 end # module XKCDMakie
