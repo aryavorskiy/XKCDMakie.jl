@@ -4,6 +4,7 @@ using Reexport
 @reexport using CairoMakie
 import Makie: Colorant
 import CairoMakie: Cairo, Screen
+import FreeTypeAbstraction
 
 using CoherentNoise
 const NOISE_DEFAULT =
@@ -11,7 +12,7 @@ const NOISE_DEFAULT =
     scale(opensimplex2_2d(seed=rand(UInt64)), 1e1) * 0.4 +
     scale(opensimplex2_2d(seed=rand(UInt64)), 1e2) * 0.8
 
-xkcd_font_dir = joinpath(@__DIR__, "..", "fonts")
+const XKCD_FONT_DIR = joinpath(@__DIR__, "..", "fonts")
 
 """
     theme_xkcd([; gridvisible, noise_generator, min_dist])
@@ -34,8 +35,10 @@ theme_xkcd(;gridvisible=false, noise_generator=NOISE_DEFAULT, min_dist=3) = Them
         ygridvisible=gridvisible
     ),
     fonts = (
-        bold = joinpath(xkcd_font_dir, "xkcd-script.otf"),
-        regular = joinpath(xkcd_font_dir, "xkcd-regular.otf")
+        bold = "XKCD",
+        regular = "XKCD",
+        italic = "XKCD",
+        bold_italic = "XKCD"
     ),
     noise_generator, min_dist
 )
@@ -143,5 +146,8 @@ end
 
 function __init__()
     Makie.set_theme!(theme_xkcd())
+    if XKCD_FONT_DIR ∉ FreeTypeAbstraction.fontpaths()
+        push!(FreeTypeAbstraction.fontpaths(), XKCD_FONT_DIR)
+    end
 end
 end # module XKCDMakie
