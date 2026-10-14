@@ -1,6 +1,6 @@
 name = "XKCDMakie"
 uuid = "ef1f67d4-2c0d-4f2d-9282-34421b12c95e"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["aryavorskiy <aleksandr.iavorskii@weizmann.ac.il>"]
 
 [deps]
