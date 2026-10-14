@@ -144,23 +144,34 @@ function CairoMakie.draw_poly(scene::Scene, screen::Screen, poly::Poly, _)
     CairoMakie.draw_poly_as_mesh(scene, screen, poly)
 end
 
-enable_math!() = MathTeXEngine.set_texfont_family!(MathTeXEngine.FontFamily("XKCD"))
-disable_math!() = MathTeXEngine.set_texfont_family!()
+"""
+    config_latex!([;text, math])
+
+Configures whether the XKCD font is used in LaTeX strings.
+
+## Keyword arguments
+- `text`: whether XKCD font is used in text mode. Default: true.
+- `math`: whether XKCD font is used in math mode. Default: false.
+"""
+function config_latex!(; text=true, math=false)
+    xkcd_fontpath = joinpath(XKCD_FONT_DIR, "xkcd-script.otf")
+    fontfamily_keys = Dict{Symbol,String}()
+    if text
+        for key in (:regular, :bold, :italic, :bold_italic)
+            fontfamily_keys[key] = xkcd_fontpath
+        end
+    end
+    if math
+        fontfamily_keys[:latex] = xkcd_fontpath
+    end
+    MathTeXEngine.set_texfont_family!(MathTeXEngine.FontFamily(fontfamily_keys))
+end
 
 function __init__()
     Makie.set_theme!(theme_xkcd())
     if XKCD_FONT_DIR ∉ FreeTypeAbstraction.fontpaths()
         push!(FreeTypeAbstraction.fontpaths(), XKCD_FONT_DIR)
     end
-    xkcd_fontpath = joinpath(XKCD_FONT_DIR, "xkcd-script.otf")
-    MathTeXEngine.default_font_families["XKCD"] = MathTeXEngine.FontFamily(
-        Dict(
-            :regular => xkcd_fontpath,
-            :italic => xkcd_fontpath,
-            :bold => xkcd_fontpath,
-            :bolditalic => xkcd_fontpath,
-            :math => xkcd_fontpath
-        )
-    )
+    config_latex!()
 end
 end # module XKCDMakie

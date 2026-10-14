@@ -27,7 +27,7 @@ You can use [Makie theme mechanism](https://docs.makie.org/dev/explanations/them
 > [!note]
 > The font in LaTeX notation cannot be controlled by Makie themes, and custom fonts are not fully supported by the backend. 
 > 
-> XKCDMakie provides experimental support, but it is manually opt-in: use `XKCDMakie.enable_math!()` and `XKCDMakie.enable_math!()`
+> XKCDMakie provides experimental support, but by default only the text mode in LaTeX strings uses the xkcd font; configure with `XKCDMakie.config_latex!(math=true)`.
 
 ## Gallery
 
